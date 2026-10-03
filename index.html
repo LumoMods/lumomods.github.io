@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumo, custom Minecraft mods</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="description" content="Custom Minecraft mods for creators' videos: built, filmed in the game with shaders, and playable in 48 to 72 hours.">
+<meta name="theme-color" content="#0B1112">
+<meta property="og:title" content="Lumo, custom Minecraft mods">
+<meta property="og:description" content="Custom Minecraft mods for your videos, playable in 48 to 72 hours.">
+<meta property="og:image" content="media/reel.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Kalam:wght@700&family=Noto+Kufi+Arabic:wght@600;800&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/reel.jpg">
+<script>document.documentElement.classList.add("js")</script>
+<style>
+  :root {
+    --deep: #0B1112;
+    --surface: #131B1C;
+    --bone: #E8ECE9;
+    --ink: #0E1515;
+    --mute: #8C9996;
+    --mute-ink: #55625F;
+    --teal: #19C9B8;
+    --teal-ink: #0A7C72;
+    --line: rgba(232, 236, 233, 0.12);
+    --line-ink: rgba(14, 21, 21, 0.14);
+    --display: "Archivo", "Noto Kufi Arabic", sans-serif;
+    --text: "Instrument Sans", "IBM Plex Sans Arabic", sans-serif;
+    --mono: "JetBrains Mono", "IBM Plex Sans Arabic", monospace;
+    --hand: "Kalam", "IBM Plex Sans Arabic", cursive;
+    --gutter: clamp(16px, 4.5vw, 72px);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; background: var(--deep); }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  body { margin: 0; background: var(--deep); color: var(--bone); font: 400 18px/1.55 var(--text); overflow-x: hidden; }
+  ::selection { background: var(--teal); color: var(--ink); }
+  a { color: inherit; }
+  img, video { display: block; max-width: 100%; }
+  :focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
+  .wrap { padding: 0 var(--gutter); max-width: 1560px; margin: 0 auto; }
+  .eyebrow { font: 500 13px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+  [dir="rtl"] .eyebrow { letter-spacing: 0; }
+  .wide { font-family: var(--display); font-stretch: 125%; font-weight: 800; letter-spacing: -0.02em; }
+  [dir="rtl"] .wide { font-stretch: 100%; letter-spacing: 0; }
+
+  /* ---- intro curtain */
+  .curtain { position: fixed; inset: 0; z-index: 60; background: var(--deep); display: grid; place-items: center; pointer-events: none; }
+  .curtain .mark { font: 800 clamp(30px, 4.4vw, 52px)/1 var(--display); font-stretch: 125%; display: flex; align-items: center; gap: 0.28em; }
+  .curtain .block { width: 1.05em; height: 1.05em; display: inline-block; transform: translateY(-120vh); }
+  .curtain .block svg { width: 100%; height: 100%; display: block; }
+  html:not(.js) .curtain { display: none; }
+
+  /* ---- header */
+  header.top { position: fixed; inset: 0 0 auto 0; z-index: 40; transition: transform 0.5s var(--ease), background 0.4s; }
+  header.top.scrolled { background: rgba(11, 17, 18, 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  header.top.hide { transform: translateY(-100%); }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 16px; }
+  .logo { font: 800 24px/1 var(--display); font-stretch: 125%; text-decoration: none; display: inline-flex; align-items: center; gap: 9px; }
+  .logo .cube { width: 30px; height: 30px; transition: transform 0.6s var(--ease); }
+  .logo:hover .cube { transform: rotate(-12deg) scale(1.08); }
+  nav.links { display: flex; gap: 28px; font: 500 15px/1 var(--text); }
+  nav.links a { text-decoration: none; color: var(--mute); transition: color 0.25s; }
+  nav.links a:hover { color: var(--bone); }
+  .langs { display: flex; gap: 2px; }
+  .langs button { background: none; border: 0; color: var(--mute); font: 500 12px/1 var(--mono); padding: 8px 7px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--teal); }
+  .right { display: flex; align-items: center; gap: 22px; }
+
+  /* ---- hero */
+  .hero { position: relative; height: 100svh; min-height: 620px; overflow: hidden; }
+  .hero video, .hero .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 17, 18, 0.5) 0%, rgba(11, 17, 18, 0) 26%, rgba(11, 17, 18, 0.25) 50%, rgba(11, 17, 18, 0.94) 100%), linear-gradient(90deg, rgba(11, 17, 18, 0.55) 0%, rgba(11, 17, 18, 0) 60%); }
+  [dir="rtl"] .hero::after { background: linear-gradient(180deg, rgba(11, 17, 18, 0.5) 0%, rgba(11, 17, 18, 0) 26%, rgba(11, 17, 18, 0.25) 50%, rgba(11, 17, 18, 0.94) 100%), linear-gradient(270deg, rgba(11, 17, 18, 0.55) 0%, rgba(11, 17, 18, 0) 60%); }
+  .hero .eyebrow { color: rgba(232, 236, 233, 0.78); }
+  .hero .wrap { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: clamp(36px, 6vh, 72px); }
+  .hero h1 { margin: 14px 0 22px; font: 800 clamp(42px, 7.4vw, 128px)/0.92 var(--display); font-stretch: 125%; letter-spacing: -0.035em; max-width: 13ch; }
+  [dir="rtl"] .hero h1 { font-stretch: 100%; letter-spacing: 0; line-height: 1.15; max-width: 16ch; }
+  .hero h1 .dot { color: var(--teal); }
+  .split .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+  .split .w > span { display: inline-block; }
+  .hero .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  .hero p.lead { max-width: 40ch; margin: 0; color: rgba(232, 236, 233, 0.82); font-size: clamp(17px, 1.3vw, 20px); }
+  .btn { display: inline-flex; align-items: center; gap: 14px; background: var(--teal); color: var(--ink); text-decoration: none; font: 600 17px/1 var(--text); padding: 18px 22px 18px 24px; border-radius: 999px; transition: transform 0.4s var(--ease), background 0.3s; will-change: transform; }
+  .btn:hover { background: #3FE0D0; }
+  .btn svg { transition: transform 0.4s var(--ease); }
+  .btn:hover svg { transform: translateX(4px); }
+  [dir="rtl"] .btn svg { transform: scaleX(-1); }
+  [dir="rtl"] .btn:hover svg { transform: scaleX(-1) translateX(4px); }
+  .scrollcue { font: 500 12px/1 var(--mono); color: var(--mute); display: flex; align-items: center; gap: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .scrollcue span { width: 1px; height: 38px; background: linear-gradient(var(--teal), transparent); display: block; animation: cue 2.2s var(--ease) infinite; transform-origin: top; }
+  @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+  /* ---- statement */
+  .statement { padding: clamp(110px, 18vw, 260px) 0 clamp(90px, 14vw, 200px); }
+  .statement p { margin: 0; font: 600 clamp(28px, 3.9vw, 64px)/1.12 var(--text); letter-spacing: -0.02em; max-width: 24ch; color: var(--teal); }
+  [dir="rtl"] .statement p { letter-spacing: 0; line-height: 1.45; }
+  .statement .w { display: inline; }
+  html.js .statement .w { opacity: 0.16; }
+
+  /* ---- work */
+  .work .head { display: flex; justify-content: space-between; align-items: end; gap: 24px; border-top: 1px solid var(--line); padding-top: 22px; margin-bottom: clamp(36px, 5vw, 72px); }
+  .work h2 { margin: 10px 0 0; font: 800 clamp(30px, 3.6vw, 56px)/1 var(--display); font-stretch: 125%; letter-spacing: -0.03em; }
+  [dir="rtl"] .work h2 { font-stretch: 100%; letter-spacing: 0; line-height: 1.3; }
+  .grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(16px, 2.4vw, 40px); row-gap: clamp(56px, 8vw, 140px); padding-bottom: clamp(100px, 12vw, 180px); }
+  .card { position: relative; }
+  .card:nth-child(1) { grid-column: 1 / span 8; }
+  .card:nth-child(2) { grid-column: 9 / span 4; margin-top: clamp(120px, 16vw, 280px); }
+  .card:nth-child(3) { grid-column: 2 / span 5; }
+  .card:nth-child(4) { grid-column: 7 / span 6; margin-top: clamp(80px, 10vw, 180px); }
+  .card button.frame { all: unset; display: block; position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #000; cursor: none; border-radius: 6px; }
+  .card:nth-child(2) button.frame { aspect-ratio: 4 / 5; }
+  .card button.frame:focus-visible { outline: 2px solid var(--teal); outline-offset: 6px; }
+  .card img, .card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease), opacity 0.5s; }
+  .card video { opacity: 0; }
+  .card.playing video { opacity: 1; }
+  .card:hover img, .card:hover video { transform: scale(1.04); }
+  .card .meta { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-top: 18px; }
+  .card h3 { margin: 0; font: 600 clamp(19px, 1.6vw, 26px)/1.2 var(--text); letter-spacing: -0.01em; max-width: 28ch; }
+  .card .tag { font: 500 12px/1 var(--mono); color: var(--mute); white-space: nowrap; }
+  .note { position: absolute; z-index: 3; font: 700 clamp(19px, 1.7vw, 27px)/1.1 var(--hand); color: var(--teal); white-space: nowrap; pointer-events: none; }
+  [dir="rtl"] .note { font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 600; font-size: clamp(16px, 1.4vw, 21px); }
+  .note .txt { display: inline-block; transform: rotate(-3deg); }
+  .note svg { position: absolute; overflow: visible; }
+  .note path { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  html.js .note .txt { clip-path: inset(0 100% 0 0); }
+  html.js[dir="rtl"] .note .txt { clip-path: inset(0 0 0 100%); }
+  [dir="rtl"] .note svg { transform: scaleX(-1); }
+  .n1 { top: 4%; left: 103%; } .n1 svg { left: -10px; top: 34px; width: 90px; height: 70px; }
+  .n2 { bottom: 30%; right: calc(100% + 26px); text-align: right; } .n2 svg { left: calc(100% - 120px); top: 34px; width: 120px; height: 60px; }
+  .n3 { top: -64px; left: 10%; } .n3 svg { left: 58%; top: 30px; width: 110px; height: 80px; }
+  .n4 { bottom: -76px; right: 2%; } .n4 svg { right: 104%; top: -60px; width: 120px; height: 70px; }
+  [dir="rtl"] .n1 { left: auto; right: 103%; } [dir="rtl"] .n1 svg { left: auto; right: -10px; transform: none; } [dir="rtl"] .n2 { right: auto; left: calc(100% + 26px); } [dir="rtl"] .n2 svg { left: 0; } [dir="rtl"] .n3 { left: auto; right: 10%; } [dir="rtl"] .n4 { right: auto; left: 2%; }
+
+  /* ---- marquee */
+  .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; padding: clamp(18px, 2.4vw, 34px) 0; white-space: nowrap; }
+  .marquee .track { display: inline-flex; gap: 0; will-change: transform; }
+  .marquee span { font: 800 clamp(30px, 4.6vw, 76px)/1 var(--display); font-stretch: 125%; letter-spacing: -0.03em; padding-inline-end: 0.6em; }
+  [dir="rtl"] .marquee span { font-stretch: 100%; letter-spacing: 0; }
+  .marquee span::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; background: var(--teal); margin-inline-start: 0.6em; vertical-align: 0.12em; }
+  .marquee span:nth-child(5n) { color: var(--teal); }
+
+  /* ---- process + prices (the work order) */
+  .sheet { background: var(--bone); color: var(--ink); border-radius: clamp(14px, 2vw, 28px) clamp(14px, 2vw, 28px) 0 0; margin-top: clamp(80px, 10vw, 160px); }
+  .sheet .eyebrow { color: var(--mute-ink); }
+  .two { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(24px, 4vw, 72px); padding: clamp(64px, 8vw, 120px) 0; border-bottom: 1px solid var(--line-ink); }
+  .two h2 { margin: 14px 0 0; font: 800 clamp(30px, 3.4vw, 52px)/1.02 var(--display); font-stretch: 112%; letter-spacing: -0.03em; }
+  [dir="rtl"] .two h2 { font-stretch: 100%; letter-spacing: 0; line-height: 1.35; }
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 72px 1fr; gap: 8px; padding: 22px 0; border-top: 1px solid var(--line-ink); }
+  ol.steps li:last-child { border-bottom: 1px solid var(--line-ink); }
+  ol.steps li::before { content: counter(s, decimal-leading-zero); font: 700 15px/1.6 var(--mono); color: var(--teal-ink); }
+  ol.steps b { display: block; font: 600 clamp(19px, 1.6vw, 24px)/1.3 var(--text); }
+  ol.steps span { color: var(--mute-ink); font-size: 16px; }
+  .prices { margin: 0; padding: 0; list-style: none; }
+  .prices li { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 22px 0; border-top: 1px solid var(--line-ink); transition: padding 0.4s var(--ease); }
+  .prices li:last-child { border-bottom: 1px solid var(--line-ink); }
+  .prices li:hover { padding-inline-start: 14px; }
+  .prices b { font: 600 clamp(18px, 1.5vw, 23px)/1.3 var(--text); }
+  .prices em { font: 800 clamp(20px, 1.8vw, 28px)/1.2 var(--display); font-style: normal; font-stretch: 112%; white-space: nowrap; color: var(--teal-ink); }
+  .small { color: var(--mute-ink); font-size: 15px; margin: 14px 0 0; }
+
+  /* ---- contact */
+  .contact { padding: clamp(80px, 11vw, 170px) 0 clamp(60px, 8vw, 110px); }
+  .contact h2 { margin: 16px 0 clamp(28px, 4vw, 56px); font: 800 clamp(40px, 6.6vw, 112px)/0.95 var(--display); font-stretch: 125%; letter-spacing: -0.035em; max-width: 14ch; }
+  [dir="rtl"] .contact h2 { font-stretch: 100%; letter-spacing: 0; line-height: 1.25; }
+  .mail { display: inline-block; font: 700 clamp(22px, 3.2vw, 52px)/1.1 var(--display); font-stretch: 110%; color: var(--teal-ink); text-decoration: none; background: linear-gradient(var(--teal-ink), var(--teal-ink)) 0 100% / 0% 3px no-repeat; transition: background-size 0.6s var(--ease); word-break: break-all; padding-bottom: 6px; }
+  .mail:hover { background-size: 100% 3px; }
+  .reply { font: 700 clamp(20px, 1.8vw, 26px)/1.2 var(--hand); color: var(--teal-ink); margin-top: 22px; display: inline-block; transform: rotate(-2deg); }
+  [dir="rtl"] .reply { font-family: "IBM Plex Sans Arabic", sans-serif; }
+  footer { border-top: 1px solid var(--line-ink); padding: 24px 0 44px; color: var(--mute-ink); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* ---- cursor pill + player */
+  .pill { position: fixed; left: 0; top: 0; z-index: 50; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%; background: var(--teal); color: var(--ink); display: grid; place-items: center; font: 600 14px/1 var(--text); pointer-events: none; transform: scale(0); }
+  dialog.player { border: 0; padding: 0; background: transparent; width: min(1400px, 94vw); max-height: 94vh; color: var(--bone); }
+  dialog.player::backdrop { background: rgba(5, 8, 8, 0.92); backdrop-filter: blur(8px); }
+  dialog.player video { width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; }
+  dialog.player button { position: absolute; top: -48px; inset-inline-end: 0; background: none; border: 1px solid var(--line); color: var(--bone); font: 500 13px/1 var(--mono); padding: 10px 14px; border-radius: 999px; cursor: pointer; }
+  dialog.player .cap { margin-top: 14px; font: 600 18px/1.3 var(--text); }
+
+  /* ---- reveal defaults (only with JS) */
+  html.js .rise { opacity: 0; transform: translateY(40px); }
+
+  .hero > *, .two > *, .grid > * { min-width: 0; }
+  @media (max-width: 900px) {
+    nav.links { display: none; }
+    .grid { grid-template-columns: 1fr; row-gap: 72px; }
+    .card:nth-child(n) { grid-column: 1 / -1; margin-top: 0; }
+    .card:nth-child(2) button.frame { aspect-ratio: 16 / 9; }
+    .note { position: relative; inset: auto !important; display: block; margin: 0 0 10px; }
+    .note svg { display: none; }
+    .two { grid-template-columns: 1fr; }
+    .card button.frame { cursor: pointer; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .rise, html.js .statement .w { opacity: 1; transform: none; }
+    html.js .note .txt { clip-path: none; }
+    .curtain { display: none; }
+    .scrollcue span { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="curtain" aria-hidden="true"><div class="mark"><span class="block"><svg class="cube" viewBox="0 0 100 100" aria-hidden="true"><polygon points="15.36,32.00 50.00,52.00 50.00,92.00 15.36,72.00" fill="#18C9B8"/><polygon points="50.00,52.00 84.64,32.00 84.64,72.00 50.00,92.00" fill="#0A7C72"/><polygon points="50.00,12.00 84.64,32.00 50.00,52.00 15.36,32.00" fill="#5FF0E0"/></svg></span>lumo</div></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Lumo, home"><svg class="cube" viewBox="0 0 100 100" aria-hidden="true"><polygon points="15.36,32.00 50.00,52.00 50.00,92.00 15.36,72.00" fill="#18C9B8"/><polygon points="50.00,52.00 84.64,32.00 84.64,72.00 50.00,92.00" fill="#0A7C72"/><polygon points="50.00,12.00 84.64,32.00 50.00,52.00 15.36,32.00" fill="#5FF0E0"/></svg>lumo</a>
+    <div class="right">
+      <nav class="links" aria-label="Sections">
+        <a href="#work" data-t="nav_work"></a><a href="#process" data-t="nav_process"></a><a href="#prices" data-t="nav_prices"></a><a href="#contact" data-t="nav_contact"></a>
+      </nav>
+      <div class="langs" role="group" aria-label="Language">
+        <button data-l="en">EN</button><button data-l="fr">FR</button><button data-l="es">ES</button><button data-l="ar">AR</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <img class="poster" src="media/reel.jpg" alt="">
+    <video id="reel" src="media/reel.mp4" poster="media/reel.jpg" muted loop playsinline preload="auto" aria-hidden="true"></video>
+    <div class="wrap">
+      <div class="eyebrow hero-in" data-t="eyebrow"></div>
+      <h1 class="split" data-t="h1" data-dot="1"></h1>
+      <div class="row hero-in">
+        <p class="lead" data-t="lead"></p>
+        <div style="display:flex;align-items:center;gap:28px">
+          <span class="scrollcue"><span></span><b data-t="scroll" style="font-weight:500"></b></span>
+          <a class="btn magnet" data-mail href="mailto:bilal.belahrache@gmail.com"><span data-t="cta"></span>
+            <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 7h15M10 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="statement">
+    <div class="wrap"><p class="split-words" data-t="statement"></p></div>
+  </section>
+
+  <section class="work" id="work">
+    <div class="wrap">
+      <div class="head rise"><div><div class="eyebrow" data-t="work_label"></div><h2 data-t="work_h"></h2></div><div class="eyebrow">Fabric 1.21.11</div></div>
+      <div class="grid">
+        <article class="card" data-clip="random-drops" data-speed="0.04">
+          <div class="note n1"><span class="txt" data-t="w1n"></span><svg viewBox="0 0 90 70"><path d="M60 4 C 40 10, 30 20, 34 34 C 38 48, 58 40, 50 30 C 42 20, 20 40, 12 64 M12 64 l -2 -14 M12 64 l 12 -8"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/random-drops.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/random-drops-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="w1t"></h3><span class="tag">01:21.6</span></div>
+        </article>
+        <article class="card" data-clip="growing-mobs" data-speed="-0.06">
+          <div class="note n2"><span class="txt" data-t="w2n"></span><svg viewBox="0 0 120 60"><path d="M4 30 H 100 M4 18 V 42 M100 18 V 42 M100 30 l -14 -8 M100 30 l -14 8"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/growing-mobs.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/growing-mobs-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="w2t"></h3><span class="tag">00:15.6</span></div>
+        </article>
+        <article class="card" data-clip="gaze-lightning" data-speed="0.05">
+          <div class="note n3"><span class="txt" data-t="w3n"></span><svg viewBox="0 0 110 80"><path d="M6 6 L 40 22 L 24 36 L 66 52 L 52 62 L 100 76 M100 76 l -16 2 M100 76 l -8 -12"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/gaze-lightning.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/gaze-lightning-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="w3t"></h3><span class="tag">00:16.4</span></div>
+        </article>
+        <article class="card" data-clip="titan" data-speed="-0.04">
+          <div class="note n4"><span class="txt" data-t="w4n"></span><svg viewBox="0 0 120 70"><path d="M116 64 C 80 70, 30 60, 8 8 M8 8 l 2 16 M8 8 l 14 8"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/titan.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/titan-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="w4t"></h3><span class="tag">00:16.6</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track"></div></div>
+
+  <div class="sheet">
+    <div class="wrap">
+      <section class="two" id="process">
+        <div class="rise"><div class="eyebrow" data-t="proc_label"></div><h2 data-t="proc_h"></h2></div>
+        <ol class="steps rise">
+          <li><div><b data-t="s1"></b><span data-t="s1d"></span></div></li>
+          <li><div><b data-t="s2"></b><span data-t="s2d"></span></div></li>
+          <li><div><b data-t="s3"></b><span data-t="s3d"></span></div></li>
+          <li><div><b data-t="s4"></b><span data-t="s4d"></span></div></li>
+        </ol>
+      </section>
+      <section class="two" id="prices">
+        <div class="rise"><div class="eyebrow" data-t="price_label"></div><h2 data-t="price_h"></h2></div>
+        <div class="rise">
+          <ul class="prices">
+            <li><b data-t="p1"></b><em data-t="p1v"></em></li>
+            <li><b data-t="p2"></b><em data-t="p2v"></em></li>
+            <li><b data-t="p3"></b><em data-t="p3v"></em></li>
+            <li><b data-t="p4"></b><em data-t="p4v"></em></li>
+          </ul>
+          <p class="small" data-t="pnote"></p>
+        </div>
+      </section>
+      <section class="contact" id="contact">
+        <div class="eyebrow" data-t="contact_label"></div>
+        <h2 class="rise" data-t="contact_h"></h2>
+        <a class="mail" data-mail href="mailto:bilal.belahrache@gmail.com">bilal.belahrache@gmail.com</a><br>
+        <span class="reply" data-t="contact_note"></span>
+      </section>
+      <footer><span data-t="foot0"></span><span data-t="foot1"></span><span data-t="foot2"></span></footer>
+    </div>
+  </div>
+</main>
+
+<div class="pill" aria-hidden="true"><span data-t="watch"></span></div>
+<dialog class="player" aria-label="Video">
+  <button type="button" data-close data-t="close"></button>
+  <video controls playsinline></video>
+  <div class="cap"></div>
+</dialog>
+
+<script>
+const T = {
+  en: {
+    nav_work: "Work", nav_process: "Process", nav_prices: "Prices", nav_contact: "Contact",
+    eyebrow: "Minecraft mods for creators · Fabric · Forge · NeoForge · Paper",
+    h1: "Custom Minecraft mods for your videos",
+    lead: "You bring the idea. I build the mod, film it in the game and send it back playable in 48 to 72 hours.",
+    cta: "Send me your idea", scroll: "Scroll", mail_subject: "Mod idea",
+    statement: "Every clip on this page is real gameplay of a mod I built, filmed in the game with shaders and cut for that mod alone. Your mod gets the same treatment.",
+    work_label: "Recent work", work_h: "Four mods, four trailers.",
+    w1t: "Every block drops a random item", w1n: "3 to 5 items per block, out of 20",
+    w2t: "Every hit makes the mob bigger", w2n: "+0.55 size per hit, up to 6x",
+    w3t: "Lightning strikes whatever you look at", w3n: "players are safe. mobs aren't.",
+    w4t: "Titan: a giant that flattens the forest", w4n: "23 blocks tall. never turns.",
+    watch: "Play", close: "Close",
+    marquee: ["Minecraft, but every block drops a random item", "Minecraft, but mobs grow when you hit them", "Minecraft, but lightning follows your eyes", "Minecraft, but a titan walks through", "Minecraft, but your idea"],
+    proc_label: "How it works", proc_h: "From idea to playable, without the back and forth.",
+    s1: "Send the idea", s1d: "A sentence is enough. A video you like as a reference helps.",
+    s2: "A fixed quote, the same day", s2d: "One price before any work. First jobs: 50% up front, 50% on delivery.",
+    s3: "Playable in 48 to 72 hours", s3d: "You get the mod, a clip of it working, and the source code if you want it.",
+    s4: "14 days of fixes", s4d: "If something I built breaks, I fix it for free.",
+    price_label: "Typical prices", price_h: "Every job gets a fixed quote first.",
+    p1: "Video mod, one mechanic", p1v: "$80 to $150", p2: "Bigger mod, or several mechanics", p2v: "$150 to $250",
+    p3: "Server plugin (Paper)", p3v: "from $60", p4: "Port a mod to a newer version", p4v: "from $25", pnote: "Paid by PayPal or Wise.",
+    contact_label: "Contact", contact_h: "Tell me your next video idea.", contact_note: "I usually reply within a few hours.",
+    foot0: "Lumo is Bilal's Minecraft mod studio.", foot1: "Also mine: Campfyre, on Modrinth and CurseForge.", foot2: "Shaders in the clips: Complementary Reimagined."
+  },
+  fr: {
+    nav_work: "Travaux", nav_process: "Méthode", nav_prices: "Prix", nav_contact: "Contact",
+    eyebrow: "Mods Minecraft pour créateurs · Fabric · Forge · NeoForge · Paper",
+    h1: "Des mods Minecraft sur mesure pour tes vidéos",
+    lead: "Tu apportes l'idée. Je crée le mod, je le filme en jeu et je te le renvoie jouable en 48 à 72 heures.",
+    cta: "Envoie-moi ton idée", scroll: "Défiler", mail_subject: "Idée de mod",
+    statement: "Chaque clip de cette page est du vrai gameplay d'un mod que j'ai créé, filmé en jeu avec des shaders et monté pour ce mod uniquement. Ton mod aura droit au même traitement.",
+    work_label: "Travaux récents", work_h: "Quatre mods, quatre trailers.",
+    w1t: "Chaque bloc donne un objet au hasard", w1n: "3 à 5 objets par bloc, parmi 20",
+    w2t: "Chaque coup fait grandir le monstre", w2n: "+0,55 de taille par coup, jusqu'à 6x",
+    w3t: "La foudre frappe tout ce que tu regardes", w3n: "les joueurs sont épargnés. pas les monstres.",
+    w4t: "Titan : un géant qui rase la forêt", w4n: "23 blocs de haut. ne tourne jamais.",
+    watch: "Lire", close: "Fermer",
+    marquee: ["Minecraft, mais chaque bloc donne un objet au hasard", "Minecraft, mais les monstres grandissent quand on les frappe", "Minecraft, mais la foudre suit ton regard", "Minecraft, mais un titan traverse la forêt", "Minecraft, mais ton idée"],
+    proc_label: "Comment ça marche", proc_h: "De l'idée au jouable, sans allers-retours.",
+    s1: "Envoie l'idée", s1d: "Une phrase suffit. Une vidéo de référence aide.",
+    s2: "Un prix fixe, le jour même", s2d: "Un seul prix avant de commencer. Premier projet : 50 % avant, 50 % à la livraison.",
+    s3: "Jouable en 48 à 72 heures", s3d: "Tu reçois le mod, un clip qui le montre, et le code source si tu veux.",
+    s4: "14 jours de corrections", s4d: "Si quelque chose que j'ai fait casse, je le corrige gratuitement.",
+    price_label: "Prix habituels", price_h: "Chaque projet a d'abord un prix fixe.",
+    p1: "Mod pour vidéo, une mécanique", p1v: "80 à 150 $", p2: "Mod plus grand, ou plusieurs mécaniques", p2v: "150 à 250 $",
+    p3: "Plugin serveur (Paper)", p3v: "dès 60 $", p4: "Porter un mod vers une version récente", p4v: "dès 25 $", pnote: "Paiement par PayPal ou Wise.",
+    contact_label: "Contact", contact_h: "Raconte-moi ta prochaine idée de vidéo.", contact_note: "Je réponds en général en quelques heures.",
+    foot0: "Lumo est le studio de mods Minecraft de Bilal.", foot1: "Aussi de moi : Campfyre, sur Modrinth et CurseForge.", foot2: "Shaders des clips : Complementary Reimagined."
+  },
+  es: {
+    nav_work: "Trabajos", nav_process: "Proceso", nav_prices: "Precios", nav_contact: "Contacto",
+    eyebrow: "Mods de Minecraft para creadores · Fabric · Forge · NeoForge · Paper",
+    h1: "Mods de Minecraft a medida para tus videos",
+    lead: "Tú pones la idea. Yo hago el mod, lo grabo en el juego y te lo devuelvo jugable en 48 a 72 horas.",
+    cta: "Envíame tu idea", scroll: "Desliza", mail_subject: "Idea de mod",
+    statement: "Cada clip de esta página es gameplay real de un mod que hice, grabado en el juego con shaders y editado solo para ese mod. Tu mod recibe el mismo trato.",
+    work_label: "Trabajo reciente", work_h: "Cuatro mods, cuatro tráilers.",
+    w1t: "Cada bloque suelta un objeto al azar", w1n: "3 a 5 objetos por bloque, de 20 posibles",
+    w2t: "Cada golpe hace más grande al mob", w2n: "+0,55 de tamaño por golpe, hasta 6x",
+    w3t: "Un rayo cae sobre todo lo que miras", w3n: "los jugadores están a salvo. los mobs no.",
+    w4t: "Titán: un gigante que arrasa el bosque", w4n: "23 bloques de alto. nunca gira.",
+    watch: "Ver", close: "Cerrar",
+    marquee: ["Minecraft, pero cada bloque suelta un objeto al azar", "Minecraft, pero los mobs crecen cuando los golpeas", "Minecraft, pero los rayos siguen tu mirada", "Minecraft, pero un titán cruza el bosque", "Minecraft, pero con tu idea"],
+    proc_label: "Cómo funciona", proc_h: "De la idea a jugable, sin idas y vueltas.",
+    s1: "Envía la idea", s1d: "Basta una frase. Un video de referencia ayuda.",
+    s2: "Precio fijo, el mismo día", s2d: "Un solo precio antes de empezar. Primer trabajo: 50 % antes, 50 % al entregar.",
+    s3: "Jugable en 48 a 72 horas", s3d: "Recibes el mod, un clip funcionando y el código fuente si lo quieres.",
+    s4: "14 días de arreglos", s4d: "Si algo que hice falla, lo arreglo gratis.",
+    price_label: "Precios habituales", price_h: "Cada trabajo tiene primero un precio fijo.",
+    p1: "Mod para video, una mecánica", p1v: "$80 a $150", p2: "Mod más grande, o varias mecánicas", p2v: "$150 a $250",
+    p3: "Plugin de servidor (Paper)", p3v: "desde $60", p4: "Portar un mod a una versión nueva", p4v: "desde $25", pnote: "Pago por PayPal o Wise.",
+    contact_label: "Contacto", contact_h: "Cuéntame tu próxima idea de video.", contact_note: "Suelo responder en pocas horas.",
+    foot0: "Lumo es el estudio de mods de Minecraft de Bilal.", foot1: "También mío: Campfyre, en Modrinth y CurseForge.", foot2: "Shaders de los clips: Complementary Reimagined."
+  },
+  ar: {
+    nav_work: "أعمال", nav_process: "طريقة العمل", nav_prices: "الأسعار", nav_contact: "تواصل",
+    eyebrow: "مودات ماينكرافت لصنّاع المحتوى · Fabric · Forge · NeoForge · Paper",
+    h1: "مودات ماينكرافت خاصة لفيديوهاتك",
+    lead: "أنت تأتي بالفكرة، وأنا أصنع المود وأصوّره داخل اللعبة وأرسله لك جاهزاً للعب خلال 48 إلى 72 ساعة.",
+    cta: "أرسل لي فكرتك", scroll: "مرّر", mail_subject: "فكرة مود",
+    statement: "كل مقطع في هذه الصفحة لعب حقيقي لمود صنعته، مصوّر داخل اللعبة مع الشيدرز ومُمنتج خصيصاً لذلك المود. ومودك سيحظى بنفس الاهتمام.",
+    work_label: "أعمال حديثة", work_h: "أربعة مودات، أربعة مقاطع.",
+    w1t: "كل بلوك يُسقط عنصراً عشوائياً", w1n: "من 3 إلى 5 عناصر لكل بلوك، من بين 20",
+    w2t: "كل ضربة تكبّر الوحش", w2n: "+0.55 في الحجم مع كل ضربة، حتى 6 أضعاف",
+    w3t: "البرق يضرب كل ما تنظر إليه", w3n: "اللاعبون في أمان. الوحوش لا.",
+    w4t: "العملاق: وحش ضخم يسحق الغابة", w4n: "طوله 23 بلوكاً. لا يستدير أبداً.",
+    watch: "تشغيل", close: "إغلاق",
+    marquee: ["ماينكرافت، لكن كل بلوك يُسقط عنصراً عشوائياً", "ماينكرافت، لكن الوحوش تكبر حين تضربها", "ماينكرافت، لكن البرق يتبع نظرك", "ماينكرافت، لكن عملاقاً يعبر الغابة", "ماينكرافت، لكن بفكرتك أنت"],
+    proc_label: "طريقة العمل", proc_h: "من الفكرة إلى مود جاهز للعب، بدون تعقيد.",
+    s1: "أرسل الفكرة", s1d: "جملة واحدة تكفي، وفيديو مرجعي يساعد.",
+    s2: "سعر ثابت في نفس اليوم", s2d: "سعر واحد قبل أي عمل. أول طلب: 50% مقدماً و50% عند التسليم.",
+    s3: "جاهز خلال 48 إلى 72 ساعة", s3d: "تستلم المود ومقطعاً يظهره وهو يعمل، والكود المصدري إن أردت.",
+    s4: "14 يوماً من الإصلاحات", s4d: "إذا تعطل شيء صنعته، أصلحه مجاناً.",
+    price_label: "أسعار تقريبية", price_h: "كل طلب يحصل على سعر ثابت أولاً.",
+    p1: "مود لفيديو، ميكانيكية واحدة", p1v: "80 إلى 150$", p2: "مود أكبر أو عدة ميكانيكيات", p2v: "150 إلى 250$",
+    p3: "بلجن سيرفر (Paper)", p3v: "من 60$", p4: "نقل مود إلى إصدار أحدث", p4v: "من 25$", pnote: "الدفع عبر PayPal أو Wise.",
+    contact_label: "تواصل", contact_h: "أخبرني بفكرة فيديوك القادم.", contact_note: "أرد عادةً خلال ساعات قليلة.",
+    foot0: "Lumo هو استوديو مودات ماينكرافت الخاص ببلال.", foot1: "من أعمالي أيضاً: Campfyre على Modrinth وCurseForge.", foot2: "الشيدرز في المقاطع: Complementary Reimagined."
+  }
+};
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+let lang = "en";
+
+function words(el, text, dot) {
+  // wrap every word so it can rise out of its own line (works for Arabic too: whole words, never letters)
+  el.textContent = "";
+  const parts = text.split(" ");
+  parts.forEach((p, i) => {
+    const w = document.createElement("span");
+    w.className = "w";
+    const inner = document.createElement("span");
+    inner.textContent = p;
+    if (dot && i === parts.length - 1) {
+      const d = document.createElement("span");
+      d.className = "dot";
+      d.textContent = ".";
+      inner.appendChild(d);
+    }
+    w.appendChild(inner);
+    el.appendChild(w);
+    if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+  });
+}
+
+function setLang(l) {
+  const t = T[l] || T.en;
+  lang = T[l] ? l : "en";
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("[data-t]").forEach(el => {
+    const v = t[el.dataset.t];
+    if (v === undefined) return;
+    if (el.classList.contains("split")) words(el, v, el.dataset.dot);
+    else if (el.classList.contains("split-words")) words(el, v, false);
+    else el.textContent = v;
+  });
+  document.querySelectorAll("[data-mail]").forEach(a => {
+    a.href = "mailto:bilal.belahrache@gmail.com?subject=" + encodeURIComponent(t.mail_subject);
+  });
+  const track = document.querySelector(".marquee .track");
+  track.textContent = "";
+  for (let r = 0; r < 3; r++) t.marquee.forEach(s => { const sp = document.createElement("span"); sp.textContent = s; track.appendChild(sp); });
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === lang)));
+  try { localStorage.setItem("lang", lang); } catch (e) {}
+  if (window.__built) window.__rebuild();
+}
+
+let start = "en";
+try { start = localStorage.getItem("lang") || (navigator.language || "en").slice(0, 2); } catch (e) {}
+setLang(start);
+document.querySelectorAll(".langs button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.l)));
+
+// ---- the player
+const dlg = document.querySelector("dialog.player");
+const pv = dlg.querySelector("video");
+function openClip(card) {
+  pv.src = "media/" + card.dataset.clip + ".mp4";
+  dlg.querySelector(".cap").textContent = card.querySelector("h3").textContent;
+  dlg.showModal();
+  window.__lenis && window.__lenis.stop();
+  pv.play().catch(() => {});
+}
+function closeClip() { pv.pause(); pv.removeAttribute("src"); pv.load(); if (dlg.open) dlg.close(); }
+dlg.addEventListener("close", () => { pv.pause(); window.__lenis && window.__lenis.start(); });
+dlg.querySelector("[data-close]").addEventListener("click", closeClip);
+dlg.addEventListener("click", e => { if (e.target === dlg) closeClip(); });
+
+document.querySelectorAll(".card").forEach(card => {
+  const btn = card.querySelector("button.frame");
+  const v = card.querySelector("video");
+  btn.setAttribute("aria-label", (T[lang].watch) + ": " + card.querySelector("h3").textContent);
+  btn.addEventListener("click", () => openClip(card));
+  if (fine) {
+    btn.addEventListener("pointerenter", () => {
+      if (!v.src) v.src = v.dataset.src;
+      v.play().then(() => card.classList.add("playing")).catch(() => {});
+    });
+    btn.addEventListener("pointerleave", () => { v.pause(); card.classList.remove("playing"); });
+  }
+});
+
+// ---- hero video only when motion is welcome
+const reel = document.getElementById("reel");
+if (!reel) {} else if (reduce) { reel.removeAttribute("autoplay"); } else { reel.play().catch(() => {}); }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script defer>
+window.addEventListener("DOMContentLoaded", () => {
+  const html = document.documentElement;
+  if (!window.gsap || !window.ScrollTrigger) { html.classList.remove("js"); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  // smooth scrolling, driven by GSAP's clock so scroll effects never lag a frame
+  if (!reduce && window.Lenis) {
+    const lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95 });
+    window.__lenis = lenis;
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
+      const id = a.getAttribute("href");
+      const el = id === "#top" ? 0 : document.querySelector(id);
+      if (el !== null) { e.preventDefault(); lenis.scrollTo(el, { duration: 1.4, offset: id === "#top" ? 0 : -70 }); }
+    }));
+  }
+
+  // header: hides going down, comes back going up, frosts once past the hero top
+  const header = document.querySelector("header.top");
+  let lastY = 0;
+  ScrollTrigger.create({ start: 0, end: "max", onUpdate: self => {
+    const y = self.scroll();
+    header.classList.toggle("scrolled", y > 40);
+    header.classList.toggle("hide", y > 300 && y > lastY && !document.querySelector("dialog[open]"));
+    lastY = y;
+  }});
+
+  if (reduce) { gsap.set(".curtain", { display: "none" }); return; }
+
+  // ---- load: the block drops onto the wordmark, the curtain lifts, the headline rises word by word
+  const intro = gsap.timeline();
+  intro.to(".curtain .block", { y: 0, duration: 0.55, ease: "power3.in" })
+       .to(".curtain .block", { scaleY: 0.7, scaleX: 1.25, transformOrigin: "50% 100%", duration: 0.08, yoyo: true, repeat: 1 })
+       .to(".curtain", { yPercent: -100, duration: 0.85, ease: "expo.inOut" }, "+=0.12")
+       .from(".hero video, .hero .poster", { scale: 1.12, duration: 1.6, ease: "expo.out" }, "<")
+       .from(".hero h1 .w > span", { yPercent: 110, duration: 1.0, ease: "expo.out", stagger: 0.06 }, "<0.35")
+       .from(".hero-in", { opacity: 0, y: 24, duration: 0.9, ease: "expo.out", stagger: 0.1 }, "<0.25")
+       .set(".curtain", { display: "none" });
+
+  // hero drifts and dims as you leave it
+  gsap.to(".hero video, .hero .poster", { yPercent: 14, scale: 1.06, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+  gsap.to(".hero .wrap", { yPercent: -18, opacity: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "40% top", end: "bottom top", scrub: true } });
+
+  // ---- things that rise into place
+  gsap.utils.toArray(".rise").forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
+
+  // ---- the work: cards slide up from a mask, drift at their own speed; notes write themselves, arrows draw
+  gsap.utils.toArray(".card").forEach(card => {
+    const frame = card.querySelector("button.frame");
+    gsap.from(frame, { clipPath: "inset(18% 0 0 0 round 6px)", y: 60, duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: card, start: "top 90%" } });
+    gsap.from(card.querySelector(".meta"), { opacity: 0, y: 20, duration: 1, ease: "expo.out", scrollTrigger: { trigger: card, start: "top 80%" } });
+    const sp = parseFloat(card.dataset.speed || 0);
+    if (window.innerWidth > 900) gsap.to(card, { y: () => -sp * window.innerHeight * 2, ease: "none", scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true } });
+    const txt = card.querySelector(".note .txt");
+    const path = card.querySelector(".note path");
+    const tl = gsap.timeline({ scrollTrigger: { trigger: card, start: "top 62%" } });
+    tl.to(txt, { clipPath: "inset(0 0% 0 0%)", duration: 0.9, ease: "steps(14)" });
+    if (path) {
+      const L = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: L, strokeDashoffset: L });
+      tl.to(path, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, "-=0.15");
+    }
+  });
+
+  // ---- the statement lights up word by word as it crosses the screen
+  let stmt;
+  function buildStatement() {
+    if (stmt) stmt.kill();
+    const ws = document.querySelectorAll(".statement .w");
+    gsap.set(ws, { opacity: 0.16 });
+    stmt = gsap.to(ws, { opacity: 1, stagger: 0.12, ease: "none", scrollTrigger: { trigger: ".statement p", start: "top 78%", end: "bottom 42%", scrub: 0.6 } });
+  }
+  buildStatement();
+
+  // ---- marquee: always moving, faster with the scroll, and it turns around when you scroll back up
+  const track = document.querySelector(".marquee .track");
+  let x = 0, dir = -1, boost = 0;
+  ScrollTrigger.create({ start: 0, end: "max", onUpdate: s => { dir = s.direction === 1 ? -1 : 1; boost = Math.min(14, Math.abs(s.getVelocity()) / 220); } });
+  gsap.ticker.add(() => {
+    const rtl = document.documentElement.dir === "rtl" ? -1 : 1;
+    const third = track.scrollWidth / 3;
+    x += (0.6 + boost) * dir * rtl;
+    boost *= 0.93;
+    if (x <= -third) x += third;
+    if (x > 0) x -= third;
+    track.style.transform = `translate3d(${x}px,0,0)`;
+  });
+
+  // ---- the play pill follows the pointer over the clips; buttons lean toward the pointer
+  if (fine) {
+    const pill = document.querySelector(".pill");
+    const px = gsap.quickTo(pill, "x", { duration: 0.45, ease: "power3" });
+    const py = gsap.quickTo(pill, "y", { duration: 0.45, ease: "power3" });
+    window.addEventListener("pointermove", e => { px(e.clientX); py(e.clientY); });
+    document.querySelectorAll(".card button.frame").forEach(f => {
+      f.addEventListener("pointerenter", () => gsap.to(pill, { scale: 1, duration: 0.45, ease: "expo.out" }));
+      f.addEventListener("pointerleave", () => gsap.to(pill, { scale: 0, duration: 0.35, ease: "expo.out" }));
+    });
+    document.querySelectorAll(".magnet").forEach(b => {
+      b.addEventListener("pointermove", e => {
+        const r = b.getBoundingClientRect();
+        gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * 0.25, y: (e.clientY - r.top - r.height / 2) * 0.35, duration: 0.5, ease: "power3" });
+      });
+      b.addEventListener("pointerleave", () => gsap.to(b, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" }));
+    });
+  }
+
+  // a language switch rebuilds the split text, so the effects that depend on it are rebuilt too
+  window.__built = true;
+  window.__rebuild = () => { gsap.set(".hero h1 .w > span", { yPercent: 0 }); buildStatement(); ScrollTrigger.refresh(); };
+});
+</script>
+</body>
+</html>
