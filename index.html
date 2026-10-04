@@ -135,7 +135,7 @@
   .n2 { bottom: 30%; right: calc(100% + 26px); text-align: right; } .n2 svg { left: calc(100% - 120px); top: 34px; width: 120px; height: 60px; }
   .n3 { top: -64px; left: 10%; } .n3 svg { left: 58%; top: 30px; width: 110px; height: 80px; }
   .n4 { bottom: -76px; right: 2%; } .n4 svg { right: 104%; top: -60px; width: 120px; height: 70px; }
-  [dir="rtl"] .n1 { left: auto; right: 103%; } [dir="rtl"] .n1 svg { left: auto; right: -10px; transform: none; } [dir="rtl"] .n2 { right: auto; left: calc(100% + 26px); } [dir="rtl"] .n2 svg { left: 0; } [dir="rtl"] .n3 { left: auto; right: 10%; } [dir="rtl"] .n4 { right: auto; left: 2%; }
+  [dir="rtl"] .n1 { left: auto; right: 103%; } [dir="rtl"] .n1 svg { left: auto; right: -10px; transform: none; } [dir="rtl"] .n2 { right: auto; left: calc(100% + 26px); } [dir="rtl"] .n2 svg { left: 0; } [dir="rtl"] .n3 { left: auto; right: 10%; } [dir="rtl"] .n4 { right: auto; left: 2%; } [dir="rtl"] .n4 svg { right: auto; left: 104%; }
 
   /* ---- marquee */
   .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; padding: clamp(18px, 2.4vw, 34px) 0; white-space: nowrap; }
@@ -183,6 +183,24 @@
   dialog.player button { position: absolute; top: -48px; inset-inline-end: 0; background: none; border: 1px solid var(--line); color: var(--bone); font: 500 13px/1 var(--mono); padding: 10px 14px; border-radius: 999px; cursor: pointer; }
   dialog.player .cap { margin-top: 14px; font: 600 18px/1.3 var(--text); }
 
+  /* ---- shop */
+  .shop .head { margin-bottom: clamp(80px, 9vw, 130px); }
+  .shop .head p { margin: 14px 0 0; color: var(--mute); font: 500 clamp(16px, 1.3vw, 19px)/1.45 var(--text); max-width: 46ch; }
+  .shopgrid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: clamp(16px, 2.4vw, 40px); row-gap: 72px; }
+  .shopgrid .card:nth-child(n) { grid-column: auto; margin-top: 0; }
+  .shopgrid .card:nth-child(n) button.frame { aspect-ratio: 16 / 9; }
+  .shopgrid .card .tag { font: 800 clamp(18px, 1.5vw, 22px)/1 var(--display); font-stretch: 112%; color: var(--teal); }
+  .ns { top: -58px; left: 3%; } .ns svg { left: 62%; top: 26px; width: 70px; height: 50px; }
+  [dir="rtl"] .ns { left: auto; right: 3%; } [dir="rtl"] .ns svg { left: auto; right: 62%; }
+  .shopbar { display: flex; justify-content: space-between; align-items: center; gap: 28px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: clamp(56px, 6vw, 90px); padding: 30px 0 clamp(100px, 12vw, 180px); }
+  .shopbar .all { display: flex; align-items: baseline; gap: 18px; font: 600 clamp(19px, 1.6vw, 24px)/1.2 var(--text); }
+  .shopbar .all em { font: 800 clamp(30px, 3.2vw, 50px)/1 var(--display); font-style: normal; font-stretch: 125%; color: var(--teal); }
+  .shopbar .small { flex-basis: 100%; margin: 0; color: var(--mute); font: 500 15px/1.55 var(--text); max-width: 70ch; }
+  @media (max-width: 900px) {
+    .shopgrid { grid-template-columns: 1fr; }
+    .ns { position: relative; }
+  }
+
   /* ---- reveal defaults (only with JS) */
   html.js .rise { opacity: 0; transform: translateY(40px); }
 
@@ -199,7 +217,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html.js .rise, html.js .statement .w { opacity: 1; transform: none; }
-    html.js .note .txt { clip-path: none; }
+    html.js .note .txt, html.js[dir="rtl"] .note .txt { clip-path: none; }
     .curtain { display: none; }
     .scrollcue span { animation: none; }
   }
@@ -213,7 +231,7 @@
     <a class="logo" href="#top" aria-label="Lumo, home"><svg class="cube" viewBox="0 0 100 100" aria-hidden="true"><polygon points="15.36,32.00 50.00,52.00 50.00,92.00 15.36,72.00" fill="#18C9B8"/><polygon points="50.00,52.00 84.64,32.00 84.64,72.00 50.00,92.00" fill="#0A7C72"/><polygon points="50.00,12.00 84.64,32.00 50.00,52.00 15.36,32.00" fill="#5FF0E0"/></svg>lumo</a>
     <div class="right">
       <nav class="links" aria-label="Sections">
-        <a href="#work" data-t="nav_work"></a><a href="#process" data-t="nav_process"></a><a href="#prices" data-t="nav_prices"></a><a href="#contact" data-t="nav_contact"></a>
+        <a href="#work" data-t="nav_work"></a><a href="#shop" data-t="nav_shop"></a><a href="#process" data-t="nav_process"></a><a href="#prices" data-t="nav_prices"></a><a href="#contact" data-t="nav_contact"></a>
       </nav>
       <div class="langs" role="group" aria-label="Language">
         <button data-l="en">EN</button><button data-l="fr">FR</button><button data-l="es">ES</button><button data-l="ar">AR</button>
@@ -272,6 +290,35 @@
     </div>
   </section>
 
+  <section class="work shop" id="shop">
+    <div class="wrap">
+      <div class="head rise"><div><div class="eyebrow" data-t="shop_label"></div><h2 data-t="shop_h"></h2><p data-t="shop_lead"></p></div><div class="eyebrow">Fabric 1.21.11</div></div>
+      <div class="shopgrid">
+        <article class="card" data-clip="drops-multiply" data-speed="0">
+          <div class="note ns"><span class="txt" data-t="m1n"></span><svg viewBox="0 0 70 50"><path d="M4 4 C 30 2, 52 14, 56 44 M56 44 l -10 -8 M56 44 l 6 -12"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/drops-multiply.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/drops-multiply-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="m1t"></h3><span class="tag">$39</span></div>
+        </article>
+        <article class="card" data-clip="everything-spreads" data-speed="0">
+          <div class="note ns"><span class="txt" data-t="m2n"></span><svg viewBox="0 0 70 50"><path d="M4 4 C 30 2, 52 14, 56 44 M56 44 l -10 -8 M56 44 l 6 -12"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/everything-spreads.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/everything-spreads-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="m2t"></h3><span class="tag">$39</span></div>
+        </article>
+        <article class="card" data-clip="enchant-actions" data-speed="0">
+          <div class="note ns"><span class="txt" data-t="m3n"></span><svg viewBox="0 0 70 50"><path d="M4 4 C 30 2, 52 14, 56 44 M56 44 l -10 -8 M56 44 l 6 -12"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/enchant-actions.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/enchant-actions-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="m3t"></h3><span class="tag">$39</span></div>
+        </article>
+      </div>
+      <div class="shopbar rise">
+        <div class="all"><span data-t="shop_all"></span><em>$99</em></div>
+        <a class="btn magnet" data-mail data-subj="shop_subject" href="mailto:bilal.belahrache@gmail.com"><span data-t="shop_buy"></span>
+          <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 7h15M10 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
+        <p class="small" data-t="shop_note"></p>
+      </div>
+    </div>
+  </section>
+
   <div class="marquee" aria-hidden="true"><div class="track"></div></div>
 
   <div class="sheet">
@@ -318,6 +365,14 @@
 <script>
 const T = {
   en: {
+    nav_shop: "Shop",
+    shop_label: "Ready-made mods", shop_h: "Ready today. $39 each.",
+    shop_lead: "Mods on the ideas creators keep making videos about. Every setting changes with a command, so you can tune it between takes.",
+    m1t: "Drops Multiply: every break multiplies the next drop", m1n: "x2 by default. any factor you want",
+    m2t: "Everything Spreads: placed blocks take over the ground", m2n: "one block took 467 stone in 8 s",
+    m3t: "Enchant Actions: every jump adds an enchantment", m3n: "jump, mine or kill. up to level 255",
+    shop_all: "All 3 mods", shop_buy: "Buy by email", shop_subject: "Ready-made mod",
+    shop_note: "Use them in as many videos as you like. Just don't share or resell the file. Paid upfront by PayPal, then the mod comes by email with a how-to for every command. Recording on another version? Ask me first.",
     nav_work: "Work", nav_process: "Process", nav_prices: "Prices", nav_contact: "Contact",
     eyebrow: "Minecraft mods for creators · Fabric · Forge · NeoForge · Paper",
     h1: "Custom Minecraft mods for your videos",
@@ -340,9 +395,17 @@ const T = {
     p1: "Video mod, one mechanic", p1v: "$80 to $150", p2: "Bigger mod, or several mechanics", p2v: "$150 to $250",
     p3: "Server plugin (Paper)", p3v: "from $60", p4: "Port a mod to a newer version", p4v: "from $25", pnote: "Paid by PayPal or Wise.",
     contact_label: "Contact", contact_h: "Tell me your next video idea.", contact_note: "I usually reply within a few hours.",
-    foot1: "Also by us: Campfyre, on Modrinth and CurseForge.", foot2: "Shaders in the clips: Complementary Reimagined."
+    foot1: "Also by us: Campfyre, on CurseForge.", foot2: "Shaders in the clips: Complementary Reimagined."
   },
   fr: {
+    nav_shop: "Boutique",
+    shop_label: "Mods prêts à l'emploi", shop_h: "Prêts aujourd'hui. 39 $ chacun.",
+    shop_lead: "Des mods sur les idées dont les créateurs font sans cesse des vidéos. Chaque réglage se change avec une commande, entre deux prises.",
+    m1t: "Drops Multiply : chaque bloc cassé multiplie le drop suivant", m1n: "x2 par défaut. le facteur que tu veux",
+    m2t: "Everything Spreads : les blocs posés envahissent le sol", m2n: "un bloc a pris 467 pierres en 8 s",
+    m3t: "Enchant Actions : chaque saut ajoute un enchantement", m3n: "sauter, miner ou tuer. jusqu'au niveau 255",
+    shop_all: "Les 3 mods", shop_buy: "Acheter par e-mail", shop_subject: "Mod prêt à l'emploi",
+    shop_note: "Utilise-les dans autant de vidéos que tu veux. Ne partage pas et ne revends pas le fichier. Paiement d'avance par PayPal, puis le mod arrive par e-mail avec un guide de toutes les commandes. Tu enregistres sur une autre version ? Demande-moi d'abord.",
     nav_work: "Travaux", nav_process: "Méthode", nav_prices: "Prix", nav_contact: "Contact",
     eyebrow: "Mods Minecraft pour créateurs · Fabric · Forge · NeoForge · Paper",
     h1: "Des mods Minecraft sur mesure pour tes vidéos",
@@ -365,9 +428,17 @@ const T = {
     p1: "Mod pour vidéo, une mécanique", p1v: "80 à 150 $", p2: "Mod plus grand, ou plusieurs mécaniques", p2v: "150 à 250 $",
     p3: "Plugin serveur (Paper)", p3v: "dès 60 $", p4: "Porter un mod vers une version récente", p4v: "dès 25 $", pnote: "Paiement par PayPal ou Wise.",
     contact_label: "Contact", contact_h: "Raconte-moi ta prochaine idée de vidéo.", contact_note: "Je réponds en général en quelques heures.",
-    foot1: "Aussi de nous : Campfyre, sur Modrinth et CurseForge.", foot2: "Shaders des clips : Complementary Reimagined."
+    foot1: "Aussi de nous : Campfyre, sur CurseForge.", foot2: "Shaders des clips : Complementary Reimagined."
   },
   es: {
+    nav_shop: "Tienda",
+    shop_label: "Mods listos", shop_h: "Listos hoy. $39 cada uno.",
+    shop_lead: "Mods sobre las ideas de las que los creadores no paran de hacer videos. Cada ajuste se cambia con un comando, entre toma y toma.",
+    m1t: "Drops Multiply: cada bloque roto multiplica el siguiente drop", m1n: "x2 por defecto. el factor que quieras",
+    m2t: "Everything Spreads: los bloques que pones invaden el suelo", m2n: "un bloque se comió 467 de piedra en 8 s",
+    m3t: "Enchant Actions: cada salto añade un encantamiento", m3n: "saltar, minar o matar. hasta nivel 255",
+    shop_all: "Los 3 mods", shop_buy: "Comprar por email", shop_subject: "Mod listo",
+    shop_note: "Úsalos en todos los videos que quieras. Solo no compartas ni revendas el archivo. Pago por adelantado con PayPal, y el mod llega por email con una guía de todos los comandos. ¿Grabas en otra versión? Pregúntame antes.",
     nav_work: "Trabajos", nav_process: "Proceso", nav_prices: "Precios", nav_contact: "Contacto",
     eyebrow: "Mods de Minecraft para creadores · Fabric · Forge · NeoForge · Paper",
     h1: "Mods de Minecraft a medida para tus videos",
@@ -390,9 +461,17 @@ const T = {
     p1: "Mod para video, una mecánica", p1v: "$80 a $150", p2: "Mod más grande, o varias mecánicas", p2v: "$150 a $250",
     p3: "Plugin de servidor (Paper)", p3v: "desde $60", p4: "Portar un mod a una versión nueva", p4v: "desde $25", pnote: "Pago por PayPal o Wise.",
     contact_label: "Contacto", contact_h: "Cuéntame tu próxima idea de video.", contact_note: "Suelo responder en pocas horas.",
-    foot1: "También nuestro: Campfyre, en Modrinth y CurseForge.", foot2: "Shaders de los clips: Complementary Reimagined."
+    foot1: "También nuestro: Campfyre, en CurseForge.", foot2: "Shaders de los clips: Complementary Reimagined."
   },
   ar: {
+    nav_shop: "المتجر",
+    shop_label: "مودات جاهزة", shop_h: "جاهزة اليوم. 39$ للواحد.",
+    shop_lead: "مودات لأفكار يصنع عنها صنّاع المحتوى فيديوهات باستمرار. كل إعداد يتغير بأمر واحد، فتضبطه بين لقطة وأخرى.",
+    m1t: "Drops Multiply: كل كسر يضاعف الغنيمة التالية", m1n: "x2 افتراضياً. وأي معامل تريده",
+    m2t: "Everything Spreads: البلوكات التي تضعها تجتاح الأرض", m2n: "بلوك واحد ابتلع 467 حجراً في 8 ثوانٍ",
+    m3t: "Enchant Actions: كل قفزة تضيف سحراً", m3n: "قفز أو تعدين أو قتل. حتى المستوى 255",
+    shop_all: "المودات الثلاثة", shop_buy: "اشترِ عبر البريد", shop_subject: "مود جاهز",
+    shop_note: "استخدمها في أي عدد من الفيديوهات. فقط لا تشارك الملف ولا تُعِد بيعه. الدفع مقدماً عبر PayPal، ثم يصلك المود بالبريد مع شرح لكل الأوامر. تسجّل على إصدار آخر؟ اسألني أولاً.",
     nav_work: "أعمال", nav_process: "طريقة العمل", nav_prices: "الأسعار", nav_contact: "تواصل",
     eyebrow: "مودات ماينكرافت لصنّاع المحتوى · Fabric · Forge · NeoForge · Paper",
     h1: "مودات ماينكرافت خاصة لفيديوهاتك",
@@ -415,7 +494,7 @@ const T = {
     p1: "مود لفيديو، ميكانيكية واحدة", p1v: "80 إلى 150$", p2: "مود أكبر أو عدة ميكانيكيات", p2v: "150 إلى 250$",
     p3: "بلجن سيرفر (Paper)", p3v: "من 60$", p4: "نقل مود إلى إصدار أحدث", p4v: "من 25$", pnote: "الدفع عبر PayPal أو Wise.",
     contact_label: "تواصل", contact_h: "أخبرني بفكرة فيديوك القادم.", contact_note: "أرد عادةً خلال ساعات قليلة.",
-    foot1: "من أعمالنا أيضاً: Campfyre على Modrinth وCurseForge.", foot2: "الشيدرز في المقاطع: Complementary Reimagined."
+    foot1: "من أعمالنا أيضاً: Campfyre على CurseForge.", foot2: "الشيدرز في المقاطع: Complementary Reimagined."
   }
 };
 
@@ -457,7 +536,7 @@ function setLang(l) {
     else el.textContent = v;
   });
   document.querySelectorAll("[data-mail]").forEach(a => {
-    a.href = "mailto:bilal.belahrache@gmail.com?subject=" + encodeURIComponent(t.mail_subject);
+    a.href = "mailto:bilal.belahrache@gmail.com?subject=" + encodeURIComponent(t[a.dataset.subj || "mail_subject"]);
   });
   const track = document.querySelector(".marquee .track");
   track.textContent = "";
