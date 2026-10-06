@@ -190,6 +190,9 @@
   .shopgrid .card:nth-child(n) { grid-column: auto; margin-top: 0; }
   .shopgrid .card:nth-child(n) button.frame { aspect-ratio: 16 / 9; }
   .shopgrid .card .tag { font: 800 clamp(18px, 1.5vw, 22px)/1 var(--display); font-stretch: 112%; color: var(--teal); }
+  .shopgrid .card.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 2fr 1fr; column-gap: clamp(16px, 2.4vw, 40px); align-items: end; }
+  .shopgrid .card.wide .meta { flex-direction: column; align-items: flex-start; gap: 14px; margin-top: 0; }
+  .shopgrid .card.wide .excl { margin: 0; color: var(--mute); font: 500 15px/1.55 var(--text); max-width: 34ch; }
   .ns { top: -58px; left: 3%; } .ns svg { left: 62%; top: 26px; width: 70px; height: 50px; }
   [dir="rtl"] .ns { left: auto; right: 3%; } [dir="rtl"] .ns svg { left: auto; right: 62%; }
   .shopbar { display: flex; justify-content: space-between; align-items: center; gap: 28px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: clamp(56px, 6vw, 90px); padding: 30px 0 clamp(100px, 12vw, 180px); }
@@ -198,7 +201,10 @@
   .shopbar .small { flex-basis: 100%; margin: 0; color: var(--mute); font: 500 15px/1.55 var(--text); max-width: 70ch; }
   @media (max-width: 900px) {
     .shopgrid { grid-template-columns: 1fr; }
+    .shopgrid .card.wide { grid-template-columns: 1fr; }
+    .shopgrid .card.wide .meta { margin-top: 18px; }
     .ns { position: relative; }
+    .shopgrid .note { white-space: normal; }
   }
 
   /* ---- reveal defaults (only with JS) */
@@ -294,6 +300,11 @@
     <div class="wrap">
       <div class="head rise"><div><div class="eyebrow" data-t="shop_label"></div><h2 data-t="shop_h"></h2><p data-t="shop_lead"></p></div><div class="eyebrow">Fabric 1.21.11</div></div>
       <div class="shopgrid">
+        <article class="card wide" data-clip="op-trades" data-speed="0">
+          <div class="note ns"><span class="txt" data-t="m4n"></span><svg viewBox="0 0 70 50"><path d="M4 6 C 22 30, 44 4, 60 40 M60 40 l -11 -6 M60 40 l 3 -12"/></svg></div>
+          <button class="frame" aria-haspopup="dialog"><img src="media/op-trades.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/op-trades-preview.mp4"></video></button>
+          <div class="meta"><h3 data-t="m4t"></h3><p class="excl" data-t="m4x"></p><span class="tag">$59</span></div>
+        </article>
         <article class="card" data-clip="drops-multiply" data-speed="0">
           <div class="note ns"><span class="txt" data-t="m1n"></span><svg viewBox="0 0 70 50"><path d="M4 4 C 30 2, 52 14, 56 44 M56 44 l -10 -8 M56 44 l 6 -12"/></svg></div>
           <button class="frame" aria-haspopup="dialog"><img src="media/drops-multiply.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" data-src="media/drops-multiply-preview.mp4"></video></button>
@@ -366,8 +377,9 @@
 const T = {
   en: {
     nav_shop: "Shop",
-    shop_label: "Ready-made mods", shop_h: "Ready today. $39 each.",
+    shop_label: "Ready-made mods", shop_h: "Ready today. From $39.",
     shop_lead: "Mods on the ideas creators keep making videos about. Every setting changes with a command, so you can tune it between takes.",
+    m4t: "OP Trades: every trade makes the villager's whole list crazier", m4n: "Sharpness 5, then 10, 20... up to 255", m4x: "One channel per language. 30 days nobody else in your language gets it.",
     m1t: "Drops Multiply: every break multiplies the next drop", m1n: "x2 by default. any factor you want",
     m2t: "Everything Spreads: placed blocks take over the ground", m2n: "one block took 467 stone in 8 s",
     m3t: "Enchant Actions: every jump adds an enchantment", m3n: "jump, mine or kill. up to level 255",
@@ -399,8 +411,9 @@ const T = {
   },
   fr: {
     nav_shop: "Boutique",
-    shop_label: "Mods prêts à l'emploi", shop_h: "Prêts aujourd'hui. 39 $ chacun.",
+    shop_label: "Mods prêts à l'emploi", shop_h: "Prêts aujourd'hui. Dès 39 $.",
     shop_lead: "Des mods sur les idées dont les créateurs font sans cesse des vidéos. Chaque réglage se change avec une commande, entre deux prises.",
+    m4t: "OP Trades : chaque échange rend toute la liste du villageois plus folle", m4n: "Tranchant 5, puis 10, 20... jusqu'à 255", m4x: "Une seule chaîne par langue. Pendant 30 jours, personne d'autre dans ta langue ne l'a.",
     m1t: "Drops Multiply : chaque bloc cassé multiplie le drop suivant", m1n: "x2 par défaut. le facteur que tu veux",
     m2t: "Everything Spreads : les blocs posés envahissent le sol", m2n: "un bloc a pris 467 pierres en 8 s",
     m3t: "Enchant Actions : chaque saut ajoute un enchantement", m3n: "sauter, miner ou tuer. jusqu'au niveau 255",
@@ -432,8 +445,9 @@ const T = {
   },
   es: {
     nav_shop: "Tienda",
-    shop_label: "Mods listos", shop_h: "Listos hoy. $39 cada uno.",
+    shop_label: "Mods listos", shop_h: "Listos hoy. Desde $39.",
     shop_lead: "Mods sobre las ideas de las que los creadores no paran de hacer videos. Cada ajuste se cambia con un comando, entre toma y toma.",
+    m4t: "OP Trades: cada tradeo vuelve más loca toda la lista del aldeano", m4n: "Filo 5, luego 10, 20... hasta 255", m4x: "Un solo canal por idioma. Durante 30 días nadie más en tu idioma lo tiene.",
     m1t: "Drops Multiply: cada bloque roto multiplica el siguiente drop", m1n: "x2 por defecto. el factor que quieras",
     m2t: "Everything Spreads: los bloques que pones invaden el suelo", m2n: "un bloque se comió 467 de piedra en 8 s",
     m3t: "Enchant Actions: cada salto añade un encantamiento", m3n: "saltar, minar o matar. hasta nivel 255",
@@ -465,8 +479,9 @@ const T = {
   },
   ar: {
     nav_shop: "المتجر",
-    shop_label: "مودات جاهزة", shop_h: "جاهزة اليوم. 39$ للواحد.",
+    shop_label: "مودات جاهزة", shop_h: "جاهزة اليوم. ابتداءً من 39$.",
     shop_lead: "مودات لأفكار يصنع عنها صنّاع المحتوى فيديوهات باستمرار. كل إعداد يتغير بأمر واحد، فتضبطه بين لقطة وأخرى.",
+    m4t: "OP Trades: كل مقايضة تجعل قائمة القروي كلها أقوى", m4n: "حدة 5، ثم 10، 20... حتى 255", m4x: "قناة واحدة لكل لغة. لمدة 30 يوماً لا يحصل عليه أحد غيرك بلغتك.",
     m1t: "Drops Multiply: كل كسر يضاعف الغنيمة التالية", m1n: "x2 افتراضياً. وأي معامل تريده",
     m2t: "Everything Spreads: البلوكات التي تضعها تجتاح الأرض", m2n: "بلوك واحد ابتلع 467 حجراً في 8 ثوانٍ",
     m3t: "Enchant Actions: كل قفزة تضيف سحراً", m3n: "قفز أو تعدين أو قتل. حتى المستوى 255",
